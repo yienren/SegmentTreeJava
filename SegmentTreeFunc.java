@@ -66,41 +66,54 @@ class SegmentTreeFunc <T extends Comparable<T>> {
     }
 
     public boolean set(T value, int i, int j) {
-        if (i < 0 || j > this.length - 1) return false;
-        return set(value, 1, 0, this.length - 1, i, j);
+        if (i < 0 || j > this.length - 1 || i > j) return false;
+        set(value, 1, 0, this.length - 1, i, j);
+        return true;
     }
 
-    protected boolean set(T value, int node, int b, int e, int i, int j) {
+    protected T set(T value, int node, int b, int e, int i, int j) {
         if (i > e || j < b)
-            return true;
+            return this.get(b, e);
         if (b == e) {
             this.tree.set(node, value);
-            return true;
+            return value;
         }
-        T t1 = this.get(node, b, e, i, j);
-        if (t1.equals(value))
-            return true;
-        set(value, node * 2, b, (b + e) / 2, i, j);
-        set(value, node * 2 + 1, (b + e) / 2 + 1, e, i, j);
-        this.tree.set(node, value);
-        return true;
+        if (this.get(node, b, e, i, j).equals(value))
+            return value;
+        T t1 = set(value, node * 2, b, (b + e) / 2, i, j);
+        T t2 = set(value, node * 2 + 1, (b + e) / 2 + 1, e, i, j);
+        T tt = func(t1, t2);
+        this.tree.set(node, tt);
+        return tt;
     }
 
     public static void main(String[] args) {
         Integer[] A = {8, 7, 3, 9, 5, 1, 10};
         SegmentTreeFunc<Integer> t = new SegmentTreeFunc<Integer>(A.length);
         t.buildTree(A);
-        System.out.println(t.get(1, 1));
-        System.out.println(t.get(1, 2));
-        System.out.println(t.get(1, 3));
-        t.set(1, 2, 2);
-        System.out.println(t.get(1, 1));
-        System.out.println(t.get(1, 2));
-        System.out.println(t.get(1, 3));
+        System.out.format("%d ", t.get(0, 1));
+        System.out.format("%d ", t.get(1, 1));
+        System.out.format("%d ", t.get(1, 2));
+        System.out.format("%d ", t.get(1, 3));
+        System.out.format("%d ", t.get(0, 3));
+        System.out.format("%d ", t.get(3, 3));
+        System.out.println();
+        t.set(11, 2, 2);
+        System.out.format("%d ", t.get(0, 1));
+        System.out.format("%d ", t.get(1, 1));
+        System.out.format("%d ", t.get(1, 2));
+        System.out.format("%d ", t.get(1, 3));
+        System.out.format("%d ", t.get(0, 3));
+        System.out.format("%d ", t.get(3, 3));
+        System.out.println();
         t.set(33, 1, 2);
-        System.out.println(t.get(1, 1));
-        System.out.println(t.get(1, 2));
-        System.out.println(t.get(1, 3));
+        System.out.format("%d ", t.get(0, 1));
+        System.out.format("%d ", t.get(1, 1));
+        System.out.format("%d ", t.get(1, 2));
+        System.out.format("%d ", t.get(1, 3));
+        System.out.format("%d ", t.get(0, 3));
+        System.out.format("%d ", t.get(3, 3));
+        System.out.println();
     }
 }
 
