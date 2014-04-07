@@ -5,7 +5,6 @@
  * The segment tree is stored like a heap array with 1-base
  */
 
-
 import java.util.*;
 
 class SegmentTreeFunc <T extends Comparable<T>> {
@@ -67,6 +66,7 @@ class SegmentTreeFunc <T extends Comparable<T>> {
     }
 
     public boolean set(T value, int i, int j) {
+        if (i < 0 || j > this.length - 1) return false;
         return set(value, 1, 0, this.length - 1, i, j);
     }
 
@@ -93,7 +93,7 @@ class SegmentTreeFunc <T extends Comparable<T>> {
         System.out.println(t.get(1, 1));
         System.out.println(t.get(1, 2));
         System.out.println(t.get(1, 3));
-        t.set(19, 2, 2);
+        t.set(1, 2, 2);
         System.out.println(t.get(1, 1));
         System.out.println(t.get(1, 2));
         System.out.println(t.get(1, 3));
